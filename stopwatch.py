@@ -11,9 +11,21 @@ class TimeDisplay(Static):
 class StopwatchWidget(Static):
     """Custom Stopwatch widget."""
     def compose(self) -> ComposeResult:
-        yield Button( "Start", id="start", variant="success")
-        yield Button("Stop", id="stop", variant="error")
-        yield Button("Reset", id="reset")
+        yield Button(
+            "Start",
+            id="start",
+            variant="success"
+        )
+        yield Button(
+            "Stop",
+            id="stop",
+            classes="hidden",
+            variant="error"
+        )
+        yield Button(
+            "Reset",
+            id="reset"
+        )
         yield TimeDisplay("00:00:00.00")
 
 
@@ -29,7 +41,7 @@ class Stopwatch(App):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header(show_clock=True)
-        with ScrollableContainer(id="stopwatchs"):
+        with ScrollableContainer():
             yield StopwatchWidget()
             yield StopwatchWidget()
         yield Footer()
