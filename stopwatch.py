@@ -8,7 +8,7 @@ class TimeDisplay(Static):
     pass
 
 
-class StopWatchWidget(Static):
+class StopwatchWidget(Static):
     """Custom Stopwatch widget."""
     def compose(self) -> ComposeResult:
         yield Button("Start", variant="success")
@@ -22,11 +22,16 @@ class Stopwatch(App):
     BINDINGS = [
         ("d", "toggle_dark_mode","Toggle dark mode")
     ]
+
+    CSS_PATH = "styles.css"
+
+
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header(show_clock=True)
         with ScrollableContainer(id="stopwatchs"):
-            yield StopWatchWidget()
+            yield StopwatchWidget()
+            yield StopwatchWidget()
         yield Footer()
 
     def action_toggle_dark_mode(self):
