@@ -1,4 +1,5 @@
 from textual.app import App, ComposeResult
+from textual.containers import ScrollableContainer
 from textual.widgets import Footer, Header, Static, Button
 
 
@@ -24,7 +25,8 @@ class Stopwatch(App):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header(show_clock=True)
-        yield StopWatchWidget()
+        with ScrollableContainer(id="stopwatchs"):
+            yield StopWatchWidget()
         yield Footer()
 
     def action_toggle_dark_mode(self):
