@@ -13,18 +13,23 @@ TimeDisplay {
     text-opacity: 60%;
 }
 
+.started #start {
+    display: none;
+}
+
+.started #stop {
+    display: block;
+}
+
 #start {
     dock: left;
 }
 
 #stop {
     dock: left;
+    display: none;
 }
 
 #reset {
     dock: right;
-}
-
-.hidden {
-    display: none;
 }

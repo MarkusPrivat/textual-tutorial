@@ -1,3 +1,4 @@
+from textual import on
 from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
 from textual.widgets import Footer, Header, Static, Button
@@ -10,6 +11,15 @@ class TimeDisplay(Static):
 
 class StopwatchWidget(Static):
     """Custom Stopwatch widget."""
+
+    @on(Button.Pressed, "#start")
+    def start_stopwatch(self):
+        self.add_class("started")
+
+    @on(Button.Pressed, "#stop")
+    def stop_stopwatch(self):
+        self.remove_class("started")
+
     def compose(self) -> ComposeResult:
         yield Button(
             "Start",
@@ -19,7 +29,6 @@ class StopwatchWidget(Static):
         yield Button(
             "Stop",
             id="stop",
-            classes="hidden",
             variant="error"
         )
         yield Button(
