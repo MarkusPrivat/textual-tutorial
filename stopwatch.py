@@ -90,7 +90,9 @@ class StopwatchWidget(Static):
 class Stopwatch(App):
     """A Textual app to manage stopwatches."""
     BINDINGS = [
-        ("d", "toggle_dark_mode","Toggle dark mode")
+        ("d", "toggle_dark_mode","Toggle dark mode"),
+        ("a", "add_stopwatch", "add"),
+        ("r", "remove_stopwatch", "remove")
     ]
 
     CSS_PATH = "styles.css"
@@ -99,8 +101,7 @@ class Stopwatch(App):
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
         yield Header(show_clock=True)
-        with ScrollableContainer():
-            yield StopwatchWidget()
+        with ScrollableContainer(id="stopwatches"):
             yield StopwatchWidget()
         yield Footer()
 
@@ -110,6 +111,18 @@ class Stopwatch(App):
             "textual-dark" if self.theme == "textual-light" else "textual-light"
         )
 
+    def action_add_stopwatch(self):
+        """An action to add a stopwatch."""
+        stopwatch = StopwatchWidget()
+        container = self.query_one("#stopwatches")
+        container.mount(stopwatch)
+        stopwatch.scroll_visible()
+
+    def action_remove_stopwatch(self):
+        """An action to remove a stopwatch."""
+        stopwatches = self.query(StopwatchWidget)
+        if stopwatches:
+            stopwatches.last().remove()
 
 if __name__ == '__main__':
     Stopwatch().run()
