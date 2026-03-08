@@ -1,7 +1,7 @@
 from time import monotonic
 
 
-from textual import on
+from textual import on, events
 from textual.app import App, ComposeResult
 from textual.containers import ScrollableContainer
 from textual.reactive import reactive
@@ -11,6 +11,22 @@ from textual.widgets import Footer, Header, Static, Button
 class TimeDisplay(Static):
     """Custom TimeDisplay widget."""
     time_elapsed = reactive(0)
+    start_time = monotonic()
+    accumulated_time = 0
+
+    def on_mount(self):
+        self.update_timer = self.set_interval(
+            1 / 60,
+            self.update_time_elapsed,
+            pause=True
+        )
+
+    def update_time_elapsed(self):
+        self.time_elapsed = (
+                self.accumulated_time +
+                (monotonic() - self.start_time)
+        )
+
     def watch_time_elapsed(self):
         time = self.time_elapsed
         time, seconds = divmod(time, 60)
@@ -21,13 +37,18 @@ class TimeDisplay(Static):
     def start(self):
         """Start keep track of the time elapsed."""
         self.start_time = monotonic()
+        self.update_timer.resume()
 
     def stop(self):
         """Stop keep track of the time elapsed."""
-        self.time_elapsed = monotonic() - self.start_time
+        self.accumulated_time   = self.time_elapsed
+        self.update_timer.pause()
 
     def reset(self):
         """Reset the time elapsed."""
+        self.accumulated_time = 0
+        self.time_elapsed = 0
+        self.update_timer.pause()
 
 
 class StopwatchWidget(Static):
